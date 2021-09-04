@@ -72,7 +72,6 @@ app.get('*', (req, res) => {
 // This adds delete method to delete a note
 app.delete('/api/notes/:id', (req, res) => {
     const noteToBeDeleted = req.params.id
-    // console.log(db)
 
     for (let i = 0; i < db.length; i++) {
 
