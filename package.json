@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/SirNathanJF/lets-take-some-notes/issues"
   },
-  "homepage": "https://github.com/SirNathanJF/lets-take-some-notes#readme"
+  "homepage": "https://github.com/SirNathanJF/lets-take-some-notes#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.12"
+  }
 }
