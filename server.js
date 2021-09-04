@@ -30,18 +30,39 @@ app.get('/api/notes', (req, res) => {
     res.json(db)
 })
 
+// sets a function for appending db later
+const readAndAppend = (content, file) => {
+    fs.readFile(file, 'utf8', (err, data) => {
+      if (err) {
+        console.error(err);
+      } else {
+        const parsedData = JSON.parse(data);
+        parsedData.push(content);
+        writeToFile(file, parsedData);
+      }
+    });
+  };
+
+// sets a function for write a file in the previous function
+  const writeToFile = (destination, content) =>
+  fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
+    err ? console.error(err) : console.info(`\nData written to ${destination}`)
+  );
+
 // sets up our POST functionality to /api/notes
 app.post('/api/notes', (req, res) => {
     const newNote = req.body
 
     newNote.id = uuid();
-
-    console.log(newNote)
-
-    db.push(newNote)
-
-    res.json(newNote)
+    if(newNote){
+    readAndAppend(newNote, './db/db.json');
+      res.json(`Note added successfully 🚀`);
+      db.push(newNote)
+    } else {
+      res.error('Error in adding note');
+    }
 })
+
 
 // sets up fallback if requests are made to a nonexistent route
 app.get('*', (req, res) => {
