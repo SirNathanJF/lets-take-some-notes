@@ -2,6 +2,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const uuid = require('./helpers/uuid');
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -16,7 +17,7 @@ app.use(express.static('public'))
 
 // route to index.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/index.html'))
+    res.sendFile(path.join(__dirname, './public/index.html'))
 })
 
 // route to notes.html
@@ -33,7 +34,7 @@ app.get('/api/notes', (req, res) => {
 app.post('/api/notes', (req, res) => {
     const newNote = req.body
 
-    newNote.id = newNote.title.replace(/\s+/g, "").toLowerCase()
+    newNote.id = uuid();
 
     console.log(newNote)
 
@@ -44,7 +45,24 @@ app.post('/api/notes', (req, res) => {
 
 // sets up fallback if requests are made to a nonexistent route
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'))
+    res.sendFile(path.join(__dirname, './public/index.html'))
+})
+
+// This adds delete method to delete a note
+app.delete('/api/notes/:id', (req, res) => {
+    const noteToBeDeleted = req.params.id
+    // console.log(db)
+
+    for (let i = 0; i < db.length; i++) {
+
+        if (noteToBeDeleted === db[i].id) {
+            db.splice(i, 1)
+
+            return res.send('Note removed.')
+        }
+    }
+
+    return res.json(false)
 })
 
 // enables server to listen at our specified port
